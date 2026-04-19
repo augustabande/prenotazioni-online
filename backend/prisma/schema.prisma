@@ -1,8 +1,148 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../../node_modules/.prisma/client"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CUSTOMER
+  INSTRUCTOR
+  ADMIN
+}
+
+enum SlotStatus {
+  AVAILABLE
+  PENDING
+  CONFIRMED
+  CANCELLED_BY_WEATHER
+  CANCELLED_BY_SCHOOL
+  COMPLETED
+}
+
+model User {
+  id         String    @id @default(uuid())
+  email      String    @unique
+  name       String
+  role       Role
+  supabaseId String?
+  createdAt  DateTime  @default(now())
+
+  instructor Instructor?
+  bookings   Booking[]
+  packages   Package[]
+}
+
+model Location {
+  id          String @id @default(uuid())
+  name        String
+  lat         Float
+  lng         Float
+  description String
+  windMinKnots Int
+  windMaxKnots Int
+
+  slots Slot[]
+}
+
+model LessonType {
+  id                  String  @id @default(uuid())
+  code                String  @unique
+  title               String
+  description         String
+  durationMinutes     Int
+  minParticipants     Int
+  maxParticipants     Int
+  pricePerPerson      Decimal @db.Decimal(10, 2)
+  requiredWindKnotsMin Int
+  requiredWindKnotsMax Int
+  active              Boolean @default(true)
+
+  slots    Slot[]
+  packages Package[]
+}
+
+model Instructor {
+  id             String   @id @default(uuid())
+  userId         String   @unique
+  bio            String
+  certifications String[]
+  colorHex       String
+  active         Boolean  @default(true)
+
+  user  User   @relation(fields: [userId], references: [id], onDelete: Restrict)
+  slots Slot[]
+}
+
+model Slot {
+  id                    String     @id @default(uuid())
+  instructorId          String
+  locationId            String
+  lessonTypeId          String
+  startsAt              DateTime
+  endsAt                DateTime
+  status                SlotStatus @default(AVAILABLE)
+  maxStudents           Int
+  weatherCheckedAt      DateTime?
+  weatherDecisionReason String?
+  windForecastKnots     Float?
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+
+  instructor Instructor @relation(fields: [instructorId], references: [id], onDelete: Restrict)
+  location   Location   @relation(fields: [locationId], references: [id], onDelete: Restrict)
+  lessonType LessonType @relation(fields: [lessonTypeId], references: [id], onDelete: Restrict)
+  bookings   Booking[]
+
+  @@index([startsAt, status])
+  @@index([instructorId, startsAt])
+}
+
+model Booking {
+  id                    String     @id @default(uuid())
+  slotId                String
+  userId                String
+  status                SlotStatus
+  stripePaymentIntentId String?
+  depositAmount         Decimal    @db.Decimal(10, 2)
+  totalAmount           Decimal    @db.Decimal(10, 2)
+  notes                 String?
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+
+  slot    Slot             @relation(fields: [slotId], references: [id], onDelete: Restrict)
+  user    User             @relation(fields: [userId], references: [id], onDelete: Restrict)
+  history BookingHistory[]
+
+  @@unique([slotId, userId])
+  @@index([userId, createdAt])
+}
+
+model Package {
+  id                    String   @id @default(uuid())
+  userId                String
+  lessonTypeId          String
+  hoursTotal            Int
+  hoursUsed             Int      @default(0)
+  expiresAt             DateTime
+  stripePaymentIntentId String
+  totalAmount           Decimal  @db.Decimal(10, 2)
+  createdAt             DateTime @default(now())
+
+  user       User       @relation(fields: [userId], references: [id], onDelete: Restrict)
+  lessonType LessonType @relation(fields: [lessonTypeId], references: [id], onDelete: Restrict)
+}
+
+model BookingHistory {
+  id        String   @id @default(uuid())
+  bookingId String
+  fromStatus String
+  toStatus   String
+  reason    String?
+  changedAt DateTime @default(now())
+  changedBy String
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 }
