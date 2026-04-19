@@ -66,11 +66,13 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
+    "@angular/animations": "^21.2.9",
     "@angular/cdk": "^21.2.7",
     "@angular/common": "~21.2.0",
     "@angular/compiler": "~21.2.0",
     "@angular/core": "~21.2.0",
     "@angular/forms": "~21.2.0",
+    "@angular/material": "^21.2.7",
     "@angular/platform-browser": "~21.2.0",
     "@angular/router": "~21.2.0",
     "@fullcalendar/angular": "^6.1.20",
@@ -88,6 +90,8 @@
     "@prisma/adapter-pg": "^7.7.0",
     "@prisma/client": "^7.7.0",
     "@prisma/client-runtime-utils": "^7.7.0",
+    "@stripe/stripe-js": "^9.2.0",
+    "@supabase/supabase-js": "^2.103.3",
     "axios": "^1.6.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
