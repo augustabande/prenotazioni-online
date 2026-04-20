@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ApiService } from '../../core/services/api.service';
 import { LessonType } from '@kite/shared-types';
@@ -62,7 +62,7 @@ export class CatalogComponent implements OnInit {
   lessons = signal<LessonType[]>([]);
   loading = signal(true);
 
-  constructor(private api: ApiService) {}
+  private api = inject(ApiService);
 
   ngOnInit() {
     this.api.getLessonTypes().subscribe({

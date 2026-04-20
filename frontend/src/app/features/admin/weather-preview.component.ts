@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, ElementRef, viewChild, afterNextRender } from '@angular/core';
+import { Component, OnInit, signal, ElementRef, viewChild, afterNextRender, inject } from '@angular/core';
 import { ApiService } from '../../core/services/api.service';
 import { WindForecast } from '@kite/shared-types';
 import { SkeletonComponent } from '../../shared/components/skeleton.component';
@@ -48,7 +48,9 @@ export class WeatherPreviewComponent implements OnInit {
   loading = signal(true);
   chartCanvas = viewChild<ElementRef<HTMLCanvasElement>>('chart');
 
-  constructor(private api: ApiService) {
+  private api = inject(ApiService);
+
+  constructor() {
     afterNextRender(() => this.drawChart());
   }
 
@@ -106,7 +108,7 @@ export class WeatherPreviewComponent implements OnInit {
     data.forEach((d, i) => {
       const x = padding.left + (i / (data.length - 1)) * chartW;
       const y = padding.top + chartH * (1 - d.windSpeedKnots / maxWind);
-      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      if (i === 0) { ctx.moveTo(x, y); } else { ctx.lineTo(x, y); }
     });
     ctx.stroke();
 

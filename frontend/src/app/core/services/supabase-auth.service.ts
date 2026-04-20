@@ -1,4 +1,4 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '../../../environments/environment';
@@ -17,7 +17,9 @@ export class SupabaseAuthService {
   readonly currentUser = this._user.asReadonly();
   readonly isLoggedIn = computed(() => !!this._user());
 
-  constructor(private http: HttpClient) {
+  private http = inject(HttpClient);
+
+  constructor() {
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseAnonKey);
     this.supabase.auth.onAuthStateChange(async (_event, session) => {
       if (session?.access_token) {

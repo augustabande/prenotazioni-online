@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, OnInit, signal, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions, EventClickArg } from '@fullcalendar/core';
@@ -118,7 +118,8 @@ export class SlotsCalendarComponent implements OnInit {
     },
   });
 
-  constructor(private api: ApiService, private snack: MatSnackBar) {}
+  private api = inject(ApiService);
+  private snack = inject(MatSnackBar);
 
   ngOnInit() {
     this.api.getInstructors().subscribe((i) => this.instructors.set(i));

@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, computed } from '@angular/core';
+import { Component, OnInit, signal, computed, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../core/services/api.service';
@@ -50,18 +50,18 @@ import { environment } from '../../../environments/environment';
               }
               <div class="space-y-3">
                 <div>
-                  <label class="text-sm font-medium text-gray-700">Nome</label>
-                  <input [value]="auth.currentUser()?.name ?? ''" disabled
+                  <label for="bf-name" class="text-sm font-medium text-gray-700">Nome</label>
+                  <input id="bf-name" [value]="auth.currentUser()?.name ?? ''" disabled
                     class="mt-1 w-full rounded-lg border bg-gray-50 px-3 py-2 text-sm" />
                 </div>
                 <div>
-                  <label class="text-sm font-medium text-gray-700">Email</label>
-                  <input [value]="auth.currentUser()?.email ?? ''" disabled
+                  <label for="bf-email" class="text-sm font-medium text-gray-700">Email</label>
+                  <input id="bf-email" [value]="auth.currentUser()?.email ?? ''" disabled
                     class="mt-1 w-full rounded-lg border bg-gray-50 px-3 py-2 text-sm" />
                 </div>
                 <div>
-                  <label class="text-sm font-medium text-gray-700">Note (opzionale)</label>
-                  <textarea [(ngModel)]="notes" rows="2"
+                  <label for="bf-notes" class="text-sm font-medium text-gray-700">Note (opzionale)</label>
+                  <textarea id="bf-notes" [(ngModel)]="notes" rows="2"
                     class="mt-1 w-full rounded-lg border px-3 py-2 text-sm" placeholder="Es: prima esperienza..."></textarea>
                 </div>
                 <label class="flex items-start gap-2 text-sm">
@@ -131,11 +131,9 @@ export class BookingFlowComponent implements OnInit {
   private cardElement: StripeCardElement | null = null;
   private clientSecret = '';
 
-  constructor(
-    private route: ActivatedRoute,
-    private api: ApiService,
-    public auth: SupabaseAuthService,
-  ) {}
+  private route = inject(ActivatedRoute);
+  private api = inject(ApiService);
+  auth = inject(SupabaseAuthService);
 
   ngOnInit() {
     const slotId = this.route.snapshot.paramMap.get('slotId')!;

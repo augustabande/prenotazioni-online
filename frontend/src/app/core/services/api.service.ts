@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { LessonType, Slot, Booking, BookingCreateResponse, Instructor, WindForecast } from '@kite/shared-types';
@@ -7,7 +7,7 @@ import { LessonType, Slot, Booking, BookingCreateResponse, Instructor, WindForec
 export class ApiService {
   private base = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
   // Lesson Types
   getLessonTypes() { return this.http.get<LessonType[]>(`${this.base}/lesson-types`); }
@@ -49,5 +49,5 @@ export class ApiService {
   getWeatherForecast(hours = 48) { return this.http.get<WindForecast[]>(`${this.base}/weather/forecast`, { params: { hours: hours.toString() } }); }
 
   // Users (admin)
-  getUsers(page = 1, limit = 20) { return this.http.get<{ data: any[]; total: number }>(`${this.base}/users`, { params: { page: page.toString(), limit: limit.toString() } }); }
+  getUsers(page = 1, limit = 20) { return this.http.get<{ data: Record<string, unknown>[]; total: number }>(`${this.base}/users`, { params: { page: page.toString(), limit: limit.toString() } }); }
 }

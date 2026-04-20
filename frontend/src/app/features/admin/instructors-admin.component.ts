@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../core/services/api.service';
 import { Instructor } from '@kite/shared-types';
@@ -60,7 +60,8 @@ export class InstructorsAdminComponent implements OnInit {
   showForm = false;
   form = { name: '', email: '', bio: '', certifications: '', colorHex: '#2563EB' };
 
-  constructor(private api: ApiService, private snack: MatSnackBar) {}
+  private api = inject(ApiService);
+  private snack = inject(MatSnackBar);
 
   ngOnInit() { this.load(); }
 

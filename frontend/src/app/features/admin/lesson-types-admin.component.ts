@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../core/services/api.service';
 import { LessonType } from '@kite/shared-types';
@@ -60,9 +60,10 @@ export class LessonTypesAdminComponent implements OnInit {
   lessons = signal<LessonType[]>([]);
   loading = signal(true);
   editing = signal(false);
-  form: any = {};
+  form: Record<string, unknown> = {};
 
-  constructor(private api: ApiService, private snack: MatSnackBar) {}
+  private api = inject(ApiService);
+  private snack = inject(MatSnackBar);
 
   ngOnInit() { this.load(); }
 

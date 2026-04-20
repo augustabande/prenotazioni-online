@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, computed } from '@angular/core';
+import { Component, OnInit, signal, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ApiService } from '../../core/services/api.service';
 import { Booking } from '@kite/shared-types';
@@ -77,7 +77,7 @@ export class DashboardComponent implements OnInit {
     );
   });
 
-  constructor(private api: ApiService) {}
+  private api = inject(ApiService);
 
   ngOnInit() {
     this.api.getMyBookings().subscribe({

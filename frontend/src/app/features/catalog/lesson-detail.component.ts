@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../core/services/api.service';
 import { LessonType } from '@kite/shared-types';
@@ -44,7 +44,9 @@ export class LessonDetailComponent implements OnInit {
   lesson = signal<LessonType | null>(null);
   loading = signal(true);
 
-  constructor(private route: ActivatedRoute, private router: Router, private api: ApiService) {}
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private api = inject(ApiService);
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id')!;

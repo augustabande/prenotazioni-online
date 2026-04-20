@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, computed } from '@angular/core';
+import { Component, OnInit, signal, computed, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../core/services/api.service';
 import { Booking } from '@kite/shared-types';
@@ -100,12 +100,10 @@ export class BookingDetailComponent implements OnInit {
     return hoursUntil >= 48;
   });
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private api: ApiService,
-    private snack: MatSnackBar,
-  ) {}
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private api = inject(ApiService);
+  private snack = inject(MatSnackBar);
 
   ngOnInit() {
     this.loadBooking();

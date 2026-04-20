@@ -1,8 +1,8 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../core/services/api.service';
-import { Booking, SlotStatus } from '@kite/shared-types';
+import { Booking } from '@kite/shared-types';
 import { StatusBadgeComponent } from '../../shared/components/status-badge.component';
 import { SkeletonComponent } from '../../shared/components/skeleton.component';
 import { EmptyComponent } from '../../shared/components/empty.component';
@@ -51,7 +51,7 @@ export class BookingsListComponent implements OnInit {
   loading = signal(true);
   filter = '';
 
-  constructor(private api: ApiService) {}
+  private api = inject(ApiService);
 
   ngOnInit() {
     this.api.getMyBookings().subscribe({

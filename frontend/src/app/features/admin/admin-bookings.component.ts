@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../core/services/api.service';
 import { Booking } from '@kite/shared-types';
@@ -71,7 +71,8 @@ export class AdminBookingsComponent implements OnInit {
   filterStatus = '';
   filterSearch = '';
 
-  constructor(private api: ApiService, private snack: MatSnackBar) {}
+  private api = inject(ApiService);
+  private snack = inject(MatSnackBar);
 
   ngOnInit() { this.load(); }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { ApiService } from '../../core/services/api.service';
 import { Booking, Slot } from '@kite/shared-types';
 import { SkeletonComponent } from '../../shared/components/skeleton.component';
@@ -64,7 +64,8 @@ export class AdminDashboardComponent implements OnInit {
   pendingSlots = signal<Slot[]>([]);
   monthRevenue = signal(0);
 
-  constructor(private api: ApiService, private snack: MatSnackBar) {}
+  private api = inject(ApiService);
+  private snack = inject(MatSnackBar);
 
   ngOnInit() {
     this.api.getAllBookings().subscribe((b) => {

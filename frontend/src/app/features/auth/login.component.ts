@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { SupabaseAuthService } from '../../core/services/supabase-auth.service';
@@ -49,8 +49,11 @@ export class LoginComponent {
   error = signal('');
   submitting = signal(false);
 
-  constructor(private auth: SupabaseAuthService, private router: Router) {
-    if (auth.isLoggedIn()) this.router.navigate(['/portale']);
+  private auth = inject(SupabaseAuthService);
+  private router = inject(Router);
+
+  constructor() {
+    if (this.auth.isLoggedIn()) this.router.navigate(['/portale']);
   }
 
   async login() {

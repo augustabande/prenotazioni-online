@@ -1,4 +1,4 @@
-import { Component, input, output, OnInit, signal, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, input, output, OnInit, signal, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions, EventClickArg } from '@fullcalendar/core';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -35,7 +35,7 @@ export class CalendarComponent implements OnInit {
     eventClick: (info: EventClickArg) => this.onEventClick(info),
   });
 
-  constructor(private api: ApiService) {}
+  private api = inject(ApiService);
 
   ngOnInit() {
     this.api.getSlots({

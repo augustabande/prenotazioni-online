@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { SupabaseAuthService } from '../../core/services/supabase-auth.service';
 
@@ -31,5 +31,5 @@ import { SupabaseAuthService } from '../../core/services/supabase-auth.service';
   `,
 })
 export class PortalLayoutComponent {
-  constructor(public auth: SupabaseAuthService) {}
+  auth = inject(SupabaseAuthService);
 }
