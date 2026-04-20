@@ -8,6 +8,7 @@ COPY backend/ backend/
 COPY libs/ libs/
 
 RUN pnpm install --frozen-lockfile
+RUN npx prisma generate --schema backend/prisma/schema.prisma
 RUN pnpm nx build backend
 RUN pnpm nx run backend:prune
 
