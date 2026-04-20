@@ -8,7 +8,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { rawBody: true });
 
   app.setGlobalPrefix('api');
-  app.enableCors({ origin: process.env['CORS_ORIGIN'] || 'http://localhost:4200' });
+  const allowedOrigins = (process.env['CORS_ORIGIN'] || 'http://localhost:4200')
+    .split(',')
+    .map(o => o.trim());
+  app.enableCors({ origin: allowedOrigins, credentials: true });
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   app.useGlobalFilters(new PrismaExceptionFilter());
 
