@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma, SlotStatus } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateSlotDto, QuerySlotsDto, UpdateSlotStatusDto } from './dto/slot.dto';
+import { CreateSlotDto, QuerySlotsDto, UpdateSlotStatusDto, CancelDayDto } from './dto/slot.dto';
 import { SlotStateMachine } from './slot-state-machine';
 
 @Injectable()
@@ -75,5 +75,36 @@ export class SlotsService {
     ]);
 
     return updatedSlot;
+  }
+
+  async cancelDay(dto: CancelDayDto, changedBy: string) {
+    const dayStart = new Date(dto.date);
+    dayStart.setHours(0, 0, 0, 0);
+    const dayEnd = new Date(dto.date);
+    dayEnd.setHours(23, 59, 59, 999);
+
+    const slots = await this.prisma.slot.findMany({
+      where: {
+        startsAt: { gte: dayStart, lte: dayEnd },
+        status: { in: [SlotStatus.AVAILABLE, SlotStatus.PENDING, SlotStatus.CONFIRMED] },
+      },
+      include: { bookings: true },
+    });
+
+    for (const slot of slots) {
+      await this.prisma.$transaction([
+        this.prisma.slot.update({ where: { id: slot.id }, data: { status: SlotStatus.CANCELLED_BY_SCHOOL } }),
+        ...slot.bookings.map((b) =>
+          this.prisma.booking.update({ where: { id: b.id }, data: { status: SlotStatus.CANCELLED_BY_SCHOOL } }),
+        ),
+        ...slot.bookings.map((b) =>
+          this.prisma.bookingHistory.create({
+            data: { bookingId: b.id, fromStatus: slot.status, toStatus: SlotStatus.CANCELLED_BY_SCHOOL, reason: dto.reason, changedBy },
+          }),
+        ),
+      ]);
+    }
+
+    return { cancelled: slots.length };
   }
 }

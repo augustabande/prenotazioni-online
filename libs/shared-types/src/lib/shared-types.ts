@@ -31,6 +31,7 @@ export interface LessonType {
   pricePerPerson: number;
   requiredWindKnotsMin: number;
   requiredWindKnotsMax: number;
+  imageUrl?: string;
   active: boolean;
 }
 
@@ -80,6 +81,7 @@ export interface Booking {
   notes?: string;
   createdAt: string;
   slot: Slot;
+  user?: User;
 }
 
 export interface AuthResponse {
@@ -90,4 +92,10 @@ export interface AuthResponse {
 export interface BookingCreateResponse {
   booking: Booking;
   clientSecret: string;
+}
+
+export interface WindForecast {
+  time: string;
+  windSpeedKnots: number;
+  windDirection: number;
 }

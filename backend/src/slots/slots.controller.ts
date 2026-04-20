@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, ParseUUIDPipe, Patch, Post, Query, Req, U
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { Role } from '@prisma/client';
 import { SlotsService } from './slots.service';
-import { CreateSlotDto, QuerySlotsDto, UpdateSlotStatusDto } from './dto/slot.dto';
+import { CreateSlotDto, QuerySlotsDto, UpdateSlotStatusDto, CancelDayDto } from './dto/slot.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
@@ -41,5 +41,14 @@ export class SlotsController {
     @CurrentUser() user: { sub: string },
   ) {
     return this.slotsService.updateStatus(id, dto, user.sub);
+  }
+
+  @Post('cancel-day')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Cancel all slots for a day (admin)' })
+  cancelDay(@Body() dto: CancelDayDto, @CurrentUser() user: { sub: string }) {
+    return this.slotsService.cancelDay(dto, user.sub);
   }
 }

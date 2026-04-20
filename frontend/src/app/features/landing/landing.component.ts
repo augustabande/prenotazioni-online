@@ -35,6 +35,10 @@ import { RouterLink } from '@angular/router';
           </div>
         }
       </section>
+
+      <footer class="border-t border-white/10 py-6 text-center text-sm text-cyan-200">
+        Powered by Kami Experience
+      </footer>
     </div>
   `,
 })

@@ -23,3 +23,8 @@ export class UpdateSlotStatusDto {
   @IsEnum(SlotStatus) newStatus!: SlotStatus;
   @IsOptional() @IsString() reason?: string;
 }
+
+export class CancelDayDto {
+  @IsDateString() date!: string;
+  @IsString() reason!: string;
+}

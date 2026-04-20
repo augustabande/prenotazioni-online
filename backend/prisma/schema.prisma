@@ -58,6 +58,7 @@ model LessonType {
   pricePerPerson      Decimal @db.Decimal(10, 2)
   requiredWindKnotsMin Int
   requiredWindKnotsMax Int
+  imageUrl            String?
   active              Boolean @default(true)
 
   slots    Slot[]

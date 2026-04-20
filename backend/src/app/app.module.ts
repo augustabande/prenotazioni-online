@@ -10,6 +10,7 @@ import { BookingsModule } from '../bookings/bookings.module';
 import { PaymentsModule } from '../payments/payments.module';
 import { WeatherModule } from '../weather/weather.module';
 import { NotificationsModule } from '../notifications/notifications.module';
+import { InstructorsModule } from '../instructors/instructors.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -26,6 +27,7 @@ import { AppService } from './app.service';
     PaymentsModule,
     WeatherModule,
     NotificationsModule,
+    InstructorsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

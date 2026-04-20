@@ -29,19 +29,26 @@ export const appRoutes: Route[] = [
     canMatch: [authGuard, roleGuard('CUSTOMER')],
     loadComponent: () => import('./features/portal/portal-layout.component').then((m) => m.PortalLayoutComponent),
     children: [
-      {
-        path: '',
-        loadComponent: () => import('./features/portal/dashboard.component').then((m) => m.DashboardComponent),
-      },
-      {
-        path: 'prenotazioni',
-        loadComponent: () => import('./features/portal/bookings-list.component').then((m) => m.BookingsListComponent),
-      },
-      {
-        path: 'prenotazioni/:id',
-        loadComponent: () => import('./features/portal/booking-detail.component').then((m) => m.BookingDetailComponent),
-      },
+      { path: '', loadComponent: () => import('./features/portal/dashboard.component').then((m) => m.DashboardComponent) },
+      { path: 'prenotazioni', loadComponent: () => import('./features/portal/bookings-list.component').then((m) => m.BookingsListComponent) },
+      { path: 'prenotazioni/:id', loadComponent: () => import('./features/portal/booking-detail.component').then((m) => m.BookingDetailComponent) },
     ],
   },
-  { path: '**', redirectTo: '' },
+  {
+    path: 'admin',
+    canMatch: [authGuard, roleGuard('ADMIN')],
+    loadComponent: () => import('./features/admin/admin-layout.component').then((m) => m.AdminLayoutComponent),
+    children: [
+      { path: '', loadComponent: () => import('./features/admin/admin-dashboard.component').then((m) => m.AdminDashboardComponent) },
+      { path: 'slots', loadComponent: () => import('./features/admin/slots-calendar.component').then((m) => m.SlotsCalendarComponent) },
+      { path: 'bookings', loadComponent: () => import('./features/admin/admin-bookings.component').then((m) => m.AdminBookingsComponent) },
+      { path: 'lesson-types', loadComponent: () => import('./features/admin/lesson-types-admin.component').then((m) => m.LessonTypesAdminComponent) },
+      { path: 'instructors', loadComponent: () => import('./features/admin/instructors-admin.component').then((m) => m.InstructorsAdminComponent) },
+      { path: 'weather', loadComponent: () => import('./features/admin/weather-preview.component').then((m) => m.WeatherPreviewComponent) },
+    ],
+  },
+  {
+    path: '**',
+    loadComponent: () => import('./shared/components/not-found.component').then((m) => m.NotFoundComponent),
+  },
 ];

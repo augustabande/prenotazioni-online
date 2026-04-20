@@ -26,6 +26,7 @@ import { SupabaseAuthService } from '../../core/services/supabase-auth.service';
       <main class="mx-auto max-w-5xl px-6 py-8">
         <router-outlet />
       </main>
+      <footer class="border-t py-4 text-center text-xs text-gray-400">Powered by Kami Experience</footer>
     </div>
   `,
 })

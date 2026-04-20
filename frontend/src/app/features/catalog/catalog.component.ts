@@ -28,7 +28,11 @@ import { EmptyComponent } from '../../shared/components/empty.component';
         } @else {
           <div class="grid gap-6 md:grid-cols-2">
             @for (l of lessons(); track l.id) {
-              <div class="rounded-2xl border bg-white p-6 shadow-sm transition hover:shadow-md">
+              <div class="overflow-hidden rounded-2xl border bg-white shadow-sm transition hover:shadow-md">
+                @if (l.imageUrl) {
+                  <img [src]="l.imageUrl" [alt]="l.title" class="h-48 w-full object-cover" />
+                }
+                <div class="p-6">
                 <div class="mb-3 flex items-start justify-between">
                   <h2 class="text-xl font-bold text-gray-900">{{ l.title }}</h2>
                   <span class="rounded-full bg-amber-100 px-3 py-1 text-sm font-bold text-amber-800">
@@ -45,6 +49,7 @@ import { EmptyComponent } from '../../shared/components/empty.component';
                   class="inline-block rounded-lg bg-cyan-600 px-5 py-2 text-sm font-medium text-white hover:bg-cyan-500">
                   Prenota →
                 </a>
+                </div>
               </div>
             }
           </div>
